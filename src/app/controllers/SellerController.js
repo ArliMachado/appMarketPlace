@@ -4,10 +4,21 @@ class SellerController {
   async store (req, res) {
     const { ad, purchase } = req.body
 
-    const sold = await Ad.findById(ad)
-    sold.purchasedBy = purchase
+    const soldedAd = await Ad.findById(ad)
 
-    const UpdatedAd = await Ad.findOneAndUpdate(ad, sold, {
+    if (soldedAd.purchasedBy) {
+      return res.status(400).json({ error: 'The Ad has been sold' })
+    }
+
+    if (purchase.ad !== ad) {
+      return res
+        .status(400)
+        .json({ error: 'Informed purchase is not associated with the ad' })
+    }
+
+    soldedAd.purchasedBy = purchase
+
+    const UpdatedAd = await Ad.findOneAndUpdate(ad, soldedAd, {
       new: true
     })
 
