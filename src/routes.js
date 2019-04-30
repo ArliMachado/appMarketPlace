@@ -45,4 +45,14 @@ routes.delete('/ads/:id', handle(controllers.AdController.destroy))
 */
 routes.post('/purchases', handle(controllers.PurchaseController.store))
 
+/*
+/*  Seller
+*/
+
+routes.post(
+  '/sellers',
+  validate(validators.Seller),
+  handle(controllers.SellerController.store)
+)
+
 module.exports = routes
